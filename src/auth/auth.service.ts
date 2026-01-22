@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { UsersService } from 'src/users/users.service';
@@ -14,7 +14,10 @@ export class AuthService {
         const user = await this.usersService.validateUser(dto);
 
         if (!user) {
-            throw new UnauthorizedException('Credenciales inválidas');
+            throw new ConflictException({
+                message: 'Credenciales inválidas',
+                success: false
+            });
         }
 
         const payload = { sub: user.id };
