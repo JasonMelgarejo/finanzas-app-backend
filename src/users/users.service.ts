@@ -7,6 +7,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersService {
     constructor(private prisma: PrismaService) {}
 
+    async getUser(userId: number) {
+        const user = await this.prisma.users.findFirst({
+            where: { id: userId },
+        });
+
+        if (!user) return null;
+
+        // Nunca devolver la contraseña
+        const { password, ...result } = user;
+        return result;
+    }
+
     async validateUser(dto: LoginDto) {
         const user = await this.prisma.users.findFirst({
             where: { email: dto.email },
