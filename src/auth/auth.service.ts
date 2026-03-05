@@ -36,7 +36,7 @@ export class AuthService {
     async createUser(dto: CreateUserDto) {
         try {
             const hash = await bcrypt.hash(dto.password, 10);
-            return await this.prisma.users.create({ data: { nombre: dto.nombre, apellido: dto.apellido, email: dto.email, password: hash }, select: { id: true, email: true } });;
+            return await this.prisma.user.create({ data: { nombre: dto.nombre, apellido: dto.apellido, email: dto.email, password: hash }, select: { id: true, email: true } });;
         } catch (error) {
             if (error.code === 'P2002') {
                 throw new ConflictException({

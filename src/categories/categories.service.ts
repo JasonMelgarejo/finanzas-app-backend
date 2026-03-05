@@ -9,7 +9,7 @@ export class CategoriesService {
 
     async saveCategory(dto: CreateCategoryDto) {
         try {
-            const existing = await this.prisma.categories.findFirst({
+            const existing = await this.prisma.category.findFirst({
                 where: {
                     name: dto.name,
                     transaction_type_id: dto.transaction_type_id
@@ -20,7 +20,7 @@ export class CategoriesService {
                 throw new ConflictException('Ya existe una categoría con ese nombre para este tipo');
             }
 
-            return await this.prisma.categories.create({ data: { 
+            return await this.prisma.category.create({ data: { 
                 name: dto.name, 
                 transaction_type_id: dto.transaction_type_id, 
                 is_default: dto.is_default
@@ -36,7 +36,7 @@ export class CategoriesService {
 
     async updateCategory(id: number, dto: UpdateCategoryDto) {
         // 1️⃣ Verificar que exista
-        const category = await this.prisma.categories.findUnique({
+        const category = await this.prisma.category.findUnique({
             where: { id }
         });
 
@@ -46,7 +46,7 @@ export class CategoriesService {
 
         // 2️⃣ Validar duplicado SOLO si vienen name y transaction_type_id
         if (dto.name || dto.transaction_type_id) {
-            const existing = await this.prisma.categories.findFirst({
+            const existing = await this.prisma.category.findFirst({
                 where: {
                     id: { not: id }, // 👈 excluye el mismo registro
                     name: dto.name ?? category.name,
@@ -60,17 +60,17 @@ export class CategoriesService {
         }
 
         // 3️⃣ Update parcial
-        return this.prisma.categories.update({
+        return this.prisma.category.update({
             where: { id },
             data: dto
         });
     }
 
     async getCategory(id: number) {
-        const category = await this.prisma.categories.findUnique({ 
+        const category = await this.prisma.category.findUnique({ 
             where: { id },
             include: {
-                transaction_types: true
+                transaction_type: true
             }
         });
 
@@ -82,12 +82,12 @@ export class CategoriesService {
     }
 
     async listCategories() {
-        const categories = await this.prisma.categories.findMany({ 
+        const categories = await this.prisma.category.findMany({ 
             select: {
                 id: true,
                 name: true,
                 is_default: true,
-                transaction_types: {
+                transaction_type: {
                     select: {
                         id: true,
                         name: true

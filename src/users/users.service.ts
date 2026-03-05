@@ -8,7 +8,7 @@ export class UsersService {
     constructor(private prisma: PrismaService) {}
 
     async getUser(userId: number) {
-        const user = await this.prisma.users.findFirst({
+        const user = await this.prisma.user.findFirst({
             where: { id: userId },
         });
 
@@ -20,7 +20,7 @@ export class UsersService {
     }
 
     async validateUser(dto: LoginDto) {
-        const user = await this.prisma.users.findFirst({
+        const user = await this.prisma.user.findFirst({
             where: { email: dto.email },
         });
 
