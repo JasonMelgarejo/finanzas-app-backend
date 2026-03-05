@@ -14,7 +14,7 @@ export class CategoriesController {
         return this.categoryService.saveCategory(dto);
     }
 
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Patch(':id')
     async updateCategory(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateCategoryDto) {
         return this.categoryService.updateCategory(id, dto);
