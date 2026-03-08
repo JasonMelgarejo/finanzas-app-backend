@@ -108,6 +108,7 @@ export class TransactionsService {
 
         return transactions.map(t => ({
             ...t,
+            amount: t.amount.toNumber(),
             transaction_date: t.transaction_date.toISOString().split('T')[0]
         }));
     }
